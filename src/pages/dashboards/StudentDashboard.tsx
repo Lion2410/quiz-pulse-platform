@@ -5,15 +5,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { BarChart, BookOpen, Clock, FileText } from "lucide-react";
-import { MOCK_QUIZZES, MOCK_COURSES, MOCK_ENROLLMENTS, MOCK_ATTEMPTS } from "@/models/types";
+import { MOCK_QUIZZES, MOCK_COURSES, MOCK_ENROLLMENTS, MOCK_ATTEMPTS, Student } from "@/models/types";
 
 const StudentDashboard: React.FC = () => {
   const { user } = useAuth();
-  const student = user as { matricNo: string };
+  // Fix the type casting issue by safely accessing matricNo
+  const matricNo = user?.role === "student" ? (user as Student).matricNo : "";
   
   // Get enrolled courses for this student
   const enrolledCourses = MOCK_ENROLLMENTS.filter(
-    enrollment => enrollment.studentMatricNo === student.matricNo
+    enrollment => enrollment.studentMatricNo === matricNo
   ).map(enrollment => {
     return MOCK_COURSES.find(course => course.id === enrollment.courseId);
   }).filter(Boolean);
@@ -27,7 +28,7 @@ const StudentDashboard: React.FC = () => {
   
   // Get recent attempts
   const recentAttempts = MOCK_ATTEMPTS.filter(
-    attempt => attempt.studentMatricNo === student.matricNo
+    attempt => attempt.studentMatricNo === matricNo
   ).sort((a, b) => b.attemptTime.getTime() - a.attemptTime.getTime()).slice(0, 3);
 
   return (

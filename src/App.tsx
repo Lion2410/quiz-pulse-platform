@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import { AuthProvider } from "@/contexts/AuthContext";
 import AppLayout from "@/components/AppLayout";
@@ -28,12 +28,15 @@ const App = () => (
             {/* Protected routes */}
             <Route element={<AppLayout />}>
               <Route index element={<Dashboard />} />
+              {/* Common routes available to all authenticated users */}
+              <Route path="/dashboard" element={<Dashboard />} />
             </Route>
             
             {/* Student routes */}
             <Route element={<AppLayout requiredRole="student" />}>
               <Route path="/courses" element={<Dashboard />} />
               <Route path="/quizzes" element={<Dashboard />} />
+              <Route path="/quizzes/:quizId" element={<Dashboard />} />
               <Route path="/results" element={<Dashboard />} />
             </Route>
             
@@ -42,6 +45,7 @@ const App = () => (
               <Route path="/courses" element={<Dashboard />} />
               <Route path="/quizzes/create" element={<Dashboard />} />
               <Route path="/quizzes/manage" element={<Dashboard />} />
+              <Route path="/quizzes/manage/:quizId" element={<Dashboard />} />
               <Route path="/results" element={<Dashboard />} />
             </Route>
             

@@ -5,11 +5,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { BarChart, BookOpen, Clock, FileText, Plus, Users } from "lucide-react";
-import { MOCK_QUIZZES, MOCK_COURSES, MOCK_ENROLLMENTS, MOCK_ATTEMPTS } from "@/models/types";
+import { MOCK_QUIZZES, MOCK_COURSES, MOCK_ENROLLMENTS, MOCK_ATTEMPTS, Lecturer } from "@/models/types";
 
 const LecturerDashboard: React.FC = () => {
   const { user } = useAuth();
-  const lecturer = user as { staffId: string };
+  // Fix the type casting issue by safely accessing staffId
+  const staffId = user?.role === "lecturer" ? (user as Lecturer).staffId : "";
   
   // Get courses for this lecturer
   const lecturerCourses = MOCK_COURSES.filter(
